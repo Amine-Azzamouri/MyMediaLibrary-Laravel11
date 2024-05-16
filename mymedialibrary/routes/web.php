@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/products', [PhotoController::class, 'store'])->name('products.store');
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('library.dashboard-upload');
 })->name('dashboard');
 
 

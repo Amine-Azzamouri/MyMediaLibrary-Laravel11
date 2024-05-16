@@ -7,14 +7,13 @@
 </head>
 <body>
 <div class="container">
-        <div class="row">
-            @foreach ($products as $product)
-                <div class="col-md-4">
-                    <!-- Assuming you're storing images as binary data -->
-                    <img src="data:image/jpeg;base64,{{ base64_encode($product->image) }}" alt="Product Image">
-                </div>
-            @endforeach
-        </div>
+    <div class="row">
+        @foreach ($products as $product)
+            <div class="col-md-4">
+                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
+            </div>
+        @endforeach
     </div>
+</div>
 </body>
 </html>

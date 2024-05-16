@@ -64,27 +64,76 @@
         button[type="submit"]:hover {
             background-color: #0054a4;
         }
+
+        .alert {
+            padding: 15px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .errorfilekind {
+            padding: 15px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .errorfilesize {
+            padding: 15px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>Upload Foto's</h2>
-    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+
+    <!-- Display success message if it exists -->
+    @if(session('success'))
+        <div class="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if(session('errorfilekind'))
+        <div class="errorfilekind">
+            {{ session('errorfilekind') }}
+        </div>
+    @endif
+    @if(session('errorfilesize'))
+        <div class="errorfilesize">
+            {{ session('errorfilesize') }}
+        </div>
+    @endif
+
+    <form id="uploadForm" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <label for="name">Product Name:</label>
         <input type="text" name="name" id="name">
         <label for="description">Description:</label>
         <textarea name="description" id="description"></textarea>
-        <label for="image">Image:</label>
-        <input type="file" name="image" id="image">
-        <button type="submit">Submit</button>
+        <label for="images">Images:</label>
+        <input type="file" name="images[]" id="images" multiple>
     </form>
 </div>
 
 <script>
-    const fileInput = document.getElementById('image');
-    const fileLabel = document.querySelector('label[for="image"]');
+    document.getElementById('images').addEventListener('change', function() {
+        document.getElementById('uploadForm').submit();
+    });
+
+    // Optional: Display selected image filenames
+    const fileInput = document.getElementById('images');
+    const fileLabel = document.querySelector('label[for="images"]');
 
     fileInput.addEventListener('change', function() {
         const files = this.files;
@@ -92,10 +141,10 @@
             if (files.length === 1) {
                 fileLabel.textContent = files[0].name;
             } else {
-                fileLabel.textContent = files.length + ' foto\'s geselecteerd';
+                fileLabel.textContent = files.length + ' photos selected';
             }
         } else {
-            fileLabel.textContent = 'Geen foto geselecteerd';
+            fileLabel.textContent = 'No photo selected';
         }
     });
 </script>
