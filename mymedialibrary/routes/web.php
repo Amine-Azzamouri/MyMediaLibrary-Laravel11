@@ -27,9 +27,13 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/products', [PhotoController::class, 'store'])->name('products.store');
-Route::get('/dashboard', function () {
+Route::get('/dashboard-upload', function () {
     return view('library.dashboard-upload');
-})->name('dashboard');
+})->name('dashboard-upload');
+
+Route::get('/previous.page', function () {
+    return view('dashboard');
+})->name('previous.page');
 
 
 require __DIR__.'/auth.php';

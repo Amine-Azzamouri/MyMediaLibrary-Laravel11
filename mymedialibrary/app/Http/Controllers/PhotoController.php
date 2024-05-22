@@ -9,25 +9,24 @@ class PhotoController extends Controller
 {
     public function store(Request $request)
     {
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                if ($image->getError() == UPLOAD_ERR_INI_SIZE) {
+                    return back()->withErrors(['images.*' => 'Bestand mag niet groter zijn dan 2048kb']);
+                }
+            }
+        }
+
         $request->validate([
             'name' => 'required',
             'description' => 'required',
             'images.*' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048', 
+        ], [
+            'images.*.mimes' => 'Upload geldige afbeeldingsbestanden (jpeg, png, jpg, gif).',
+            'images.*.max' => 'Bestand mag niet groter zijn dan 2048kb',
         ]);
     
         foreach ($request->file('images') as $image) {
-            // Check if file is an image
-            if (!$image->isValid() || !in_array($image->getClientOriginalExtension(), ['jpeg', 'png', 'jpg', 'gif'])) {
-                var_dump('Invalid file type');
-                return redirect()->route('dashboard')->with('errorfilekind', 'Please upload valid image files (jpeg, png, jpg, gif).');
-
-            }
-    
-            // Check if file size exceeds 2048 KB
-            if ($image->getSize() > 2048 * 1024) {
-                return redirect()->route('dashboard')->with('errorfilesize', 'foto te groot');
-            }
-    
             $imageName = time().'_'.$image->getClientOriginalName();
             $image->move(public_path('images'), $imageName);
             $product = new Product();
@@ -37,16 +36,13 @@ class PhotoController extends Controller
             $product->save();
         }
     
-        return redirect()->route('dashboard')->with('success', 'foto succesfol geupload!');
+        return redirect()->route('dashboard-upload')->with('success', 'Foto succesvol geupload!');
     }
     
 
     public function showLibrary()
     {
-        $products = Product::all(); // Fetch all products
+        $products = Product::all(); 
         return view('library.dashboard-library', compact('products'));
     }
 }
-
-
-

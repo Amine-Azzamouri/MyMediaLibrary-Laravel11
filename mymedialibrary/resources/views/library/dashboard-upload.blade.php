@@ -18,6 +18,24 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .go-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #0070e0;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .go-back:hover {
+            background-color: #0054a4;
         }
         h2 {
             text-align: center;
@@ -75,19 +93,19 @@
         }
 
         .errorfilekind {
-            padding: 15px;
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            border-radius: 4px;
-            margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f8d7da; 
+        color: #721c24; 
+        border: 1px solid #f5c6cb; 
+        border-radius: 4px;
+        margin-bottom: 20px;
         }
 
         .errorfilesize {
             padding: 15px;
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background-color: #f8d7da; 
+            color: #721c24; 
+            border: 1px solid #f5c6cb; 
             border-radius: 4px;
             margin-bottom: 20px;
         }
@@ -96,42 +114,71 @@
 <body>
 
 <div class="container">
+    <a href="{{ route('previous.page') }}" class="go-back">Go Back</a>
     <h2>Upload Foto's</h2>
 
-    <!-- Display success message if it exists -->
     @if(session('success'))
         <div class="alert">
             {{ session('success') }}
         </div>
     @endif
-    @if(session('errorfilekind'))
-        <div class="errorfilekind">
-            {{ session('errorfilekind') }}
-        </div>
-    @endif
-    @if(session('errorfilesize'))
+
+    @if ($errors->any())
         <div class="errorfilesize">
-            {{ session('errorfilesize') }}
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
     @endif
 
     <form id="uploadForm" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <label for="name">Product Name:</label>
-        <input type="text" name="name" id="name">
-        <label for="description">Description:</label>
-        <textarea name="description" id="description"></textarea>
-        <label for="images">Images:</label>
-        <input type="file" name="images[]" id="images" multiple>
-    </form>
+    @csrf
+    <label for="name">Product Name:</label>
+    <input type="text" name="name" id="name" required>
+    @if($errors->has('name'))
+        <div class="errorfilekind">
+            @foreach ($errors->get('name') as $message)
+                {{ $message }}
+            @endforeach
+        </div>
+    @endif
+    <label for="description">Description:</label>
+    <textarea name="description" id="description" required></textarea>
+    @if($errors->has('description'))
+        <div class="errorfilekind">
+            @foreach ($errors->get('description') as $message)
+                {{ $message }}
+            @endforeach
+        </div>
+    @endif
+    <label for="images">Images:</label>
+    <input type="file" name="images[]" id="images" multiple required>
+    @if($errors->has('images'))
+        <div class="errorfilekind">
+            @foreach ($errors->get('images') as $message)
+                {{ $message }}
+            @endforeach
+        </div>
+    @endif
+    <button type="submit">Upload</button>
+</form>
 </div>
 
 <script>
-    document.getElementById('images').addEventListener('change', function() {
-        document.getElementById('uploadForm').submit();
-    });
 
-    // Optional: Display selected image filenames
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    const fileInput = document.getElementById('images');
+    const errorContainer = document.querySelector('.errorfilekind');
+    if (fileInput.files.length === 0) {
+        e.preventDefault();
+        errorContainer.innerHTML = 'Please select at least one image.';
+        errorContainer.style.display = 'block';
+    } else {
+        errorContainer.style.display = 'none';
+    }
+});
     const fileInput = document.getElementById('images');
     const fileLabel = document.querySelector('label[for="images"]');
 
