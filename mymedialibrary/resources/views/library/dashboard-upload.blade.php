@@ -7,35 +7,40 @@
     <style>
         body {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            background-color: #f8f8f8;
+            background: url('{{ asset('images/gif.gif') }}') no-repeat center center fixed;
+            background-size: cover;
             margin: 0;
             padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .container {
-            max-width: 400px;
-            margin: 50px auto;
+            width: 400px;
             background-color: #fff;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
         .go-back {
             position: absolute;
             top: 20px;
             left: 20px;
-            background-color: #0070e0;
+            background-color: #6c757d;
             color: #fff;
             padding: 10px 20px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
             text-decoration: none;
             font-size: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .go-back:hover {
-            background-color: #0054a4;
+            background-color: #5a6268;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
         h2 {
             text-align: center;
@@ -43,17 +48,19 @@
         }
         label {
             display: block;
-            background-color: #0070e0;
+            background-color: #6c757d;
             color: #fff;
             padding: 12px;
             text-align: center;
             border-radius: 8px;
             cursor: pointer;
             margin-bottom: 12px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         label:hover {
-            background-color: #0054a4;
+            background-color: #5a6268;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
         input[type="text"],
         textarea {
@@ -72,15 +79,17 @@
             display: block;
             width: 100%;
             padding: 12px;
-            background-color: #0070e0;
+            background-color: #6c757d;
             color: #fff;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         button[type="submit"]:hover {
-            background-color: #0054a4;
+            background-color: #5a6268;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         .alert {
@@ -90,17 +99,10 @@
             border: 1px solid #c3e6cb;
             border-radius: 4px;
             margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .errorfilekind {
-        padding: 15px;
-        background-color: #f8d7da; 
-        color: #721c24; 
-        border: 1px solid #f5c6cb; 
-        border-radius: 4px;
-        margin-bottom: 20px;
-        }
-
+        .errorfilekind,
         .errorfilesize {
             padding: 15px;
             background-color: #f8d7da; 
@@ -108,11 +110,11 @@
             border: 1px solid #f5c6cb; 
             border-radius: 4px;
             margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
-
 <div class="container">
     <a href="{{ route('previous.page') }}" class="go-back">Go Back</a>
     <h2>Upload Foto's</h2>
@@ -167,18 +169,18 @@
 </div>
 
 <script>
-
     document.getElementById('uploadForm').addEventListener('submit', function(e) {
-    const fileInput = document.getElementById('images');
-    const errorContainer = document.querySelector('.errorfilekind');
-    if (fileInput.files.length === 0) {
-        e.preventDefault();
-        errorContainer.innerHTML = 'Please select at least one image.';
-        errorContainer.style.display = 'block';
-    } else {
-        errorContainer.style.display = 'none';
-    }
-});
+        const fileInput = document.getElementById('images');
+        const errorContainer = document.querySelector('.errorfilekind');
+        if (fileInput.files.length === 0) {
+            e.preventDefault();
+            errorContainer.innerHTML = 'Please select at least one image.';
+            errorContainer.style.display = 'block';
+        } else {
+            errorContainer.style.display = 'none';
+        }
+    });
+
     const fileInput = document.getElementById('images');
     const fileLabel = document.querySelector('label[for="images"]');
 
